@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script>
+
+$(function() 
+{
+    jQuery.ajax
+    ({
+        url: "Receptioniest.php",
+        data: 'method=getAllRooms',
+        type: "GET",
+        cache: false,
+        processData: false, 
+        contentType: false,
+        success:function(data)
+        {
+            //alert(data);
+            var roles = JSON.parse(data);
+            roles.forEach(function(item,index) 
+            {
+                $('#Selected_Room')
+                .append($("<option></option>")
+                        .attr("value",item.id)
+                        .text('Room #:'+item.room_number+',room view is :'+item.room_view+', price is : '+item.price)); 
+            });
+            
+        }
+        ,error: function(jqXHR, textStatus, errorThrown)
+        {
+            alert("Upload Failed!");
+                    
+        }          
+            });	
+});
+
+
+    function addGuest()
+     {
+        var data = new FormData();
+        var role = $("#addJobtext").val();
+        data.append('method', 'addguest'); 
+        data.append('First_Name',$("#Guest_First_Name").val());
+        data.append('Last_Name',$("#Guest_Last_Name").val());
+        data.append('Family_Name',$("#Guest_Family_Name").val());
+        data.append('Nationality',$("#Guest_Nationality").val());
+        data.append('Age',$("#Guest_Age").val());
+        data.append('Passport',$("#Guest_Passport").val());
+        data.append('Phone_Number',$("#Guest_PhoneNumber").val());
+        data.append('Arrival_Date',$("#Guest_ArrivalDate").val());
+        data.append('Arrival_Time',$("#Guest_ArrivalTime").val());
+        data.append('DepartureDate',$("#Guest_DepartureDate").val());
+        data.append('DepartureTime',$("#Guest_DepartureTime").val());
+        data.append('ArrivedFrom',$("#Guest_ArrivedFrom").val());
+        data.append('roomNum',$("#Selected_Room").val());
+        alert($("#Selected_Room").val());
+        jQuery.ajax({
+            url: "Receptioniest.php",
+            data: data,
+            type: "POST",
+            cache: false,
+            processData: false, // Don't process the files
+            contentType: false,
+            success:function(data2)
+            {
+                 alert("Guest Information Saved Successfully!");
+              
+                
+            },
+            error: function(jqXHR, textStatus, errorThrown)
+            {
+                alert("Failed to Save Guest Info !");
+            }
+        });
+               
+                }
+
+    function ReserveRoom()
+     {
+        var data = new FormData();
+        var role = $("#addJobtext").val();
+        data.append('method', 'ReserveRoom'); 
+        data.append('Family_Name',$("#Guest_Family_Name").val());
+        data.append('RoomNumber',$("#Guest_RoomNumber").val());
+        jQuery.ajax({
+            url: "Receptioniest.php",
+            data: data,
+            type: "POST",
+            cache: false,
+            processData: false, // Don't process the files
+            contentType: false,
+            success:function(data2)
+            {
+                 alert("Room Reserved Successfully!");
+              
+                
+            },
+            error: function(jqXHR, textStatus, errorThrown)
+            {
+                alert("Failed to Reserve Guest Room !");
+            }
+        });
+               
+                }
+    
+                
+</script>
+<html>
+<head>
+<title> Guest Page </title>
+</head>
+<body>
+<h1> Guest Form  </h1>
+<div>
+    First Name :
+    <input type="text" id="Guest_First_Name" required> <br>
+    Last Name :
+    <input type="text" id="Guest_Last_Name" required><br>
+    Family Name :
+    <input type="text" id="Guest_Family_Name" required><br>
+    Nationality :
+    <input type="text" id="Guest_Nationality" required><br>
+    Age :
+    <input type="number" id="Guest_Age" required><br>
+    Passport Number :
+    <input type="number" id="Guest_Passport" required><br>
+    Phone Number :
+    <input type="text" id="Guest_PhoneNumber" required><br>
+    Arrival Date :
+    <input type="date" id="Guest_ArrivalDate" required> 
+    Arrival Time :
+    <input type="time" id="Guest_ArrivalTime" required> <br>
+    Departure Date :
+    <input type="date" id="Guest_DepartureDate" required>
+    Departure Time :
+    <input type="time" id="Guest_DepartureTime" required><br>
+    Arrived From :
+    <input type="text" id="Guest_ArrivedFrom" required><br>
+   <select id="Selected_Room" > </select>
+<button onclick="addGuest() ; ReserveRoom()  " > Add Guest </button>
+</div>
+</body>
+</html>
+
+

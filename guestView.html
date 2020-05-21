@@ -1,0 +1,771 @@
+<html>
+
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="newstyle.css">
+    
+    </head>
+
+    <body>
+    
+<script>
+
+    $(function() 
+    {
+        jQuery.ajax
+        ({
+        url: "Receptioniest.php",
+        data: 'method=getAllRooms',
+        type: "GET",
+        cache: false,
+        processData: false, 
+        contentType: false,
+        success:function(data)
+        {
+        var roles = JSON.parse(data);
+        roles.forEach(function(item,index) 
+        {
+            $('#Selected_Room')
+            .append($("<option></option>")
+                    .attr("value",item.id)
+                    .text('Room #:'+item.room_number+',room view is :'+item.room_view+', price is : '+item.price)); 
+        });
+            
+        }
+        ,error: function(jqXHR, textStatus, errorThrown)
+        {
+        alert("Upload Failed!");
+        } 
+
+        });	
+
+    });
+
+    function getAvgRate()
+    { var data = new FormData();
+        data.append('method','getRate'); 
+        jQuery.ajax({
+       
+            url: "rateClass.php",
+            data: data,
+            type: "POST",
+            cache: false,
+            processData: false, // Don't process the files
+            contentType: false,
+            success:function(data2)
+            {
+                $("#rateDiv").html('Hotel rate is '+data2*2+'/10');
+              
+            },
+            error: function(jqXHR, textStatus, errorThrown)
+            {
+                alert("Failed!");
+            }
+        });
+       
+    }
+   
+    function rate()
+     {          
+        var data = new FormData();
+        data.append('method','rating'); 
+        data.append('rate-guest-name',$('#rate-guest-name').val());
+        
+        data.append('room',$('#inputText4').val());
+        data.append('doc',$('#date').val());
+        data.append('front',$('input[name=radio-inline]:checked').val());
+        data.append('rest',$('input[name=radio-inline1]:checked').val());
+        data.append('ser',$('input[name=radio-inline2]:checked').val());
+        data.append('app',$('input[name=radio-inline3]:checked').val());
+        data.append('clean',$('input[name=radio-inline4]:checked').val());
+        data.append('serv',$('input[name=radio-inline5]:checked').val());
+        data.append('att',$('input[name=radio-inline6]:checked').val());
+        data.append('exp',$('input[name=radio-inline7]:checked').val());
+        data.append('finalc',$('#rate-textarea').val());
+        jQuery.ajax({
+            url: "rateClass.php",
+            data: data,
+            type: "POST",
+            cache: false,
+            processData: false, // Don't process the files
+            contentType: false,
+            success:function(data2)
+            {
+                 alert("inserted Successfully!");
+              
+                
+            },
+            error: function(jqXHR, textStatus, errorThrown)
+            {
+                alert("Failed!");
+            }
+        });
+               
+}
+
+    function spcecial_request()
+        {          
+            var data = new FormData();
+            data.append('method','requesting'); 
+            data.append('name',$('#inputText3').val());
+            data.append('extra_bed',$('input[name=radio-inline]:checked').val());
+            data.append('sea_view',$('input[name=radio-inline1]:checked').val());
+            data.append('pool_view',$('input[name=radio-inline2]:checked').val());
+            data.append('room_breakfast',$('input[name=radio-inline3]:checked').val());
+            data.append('alchol',$('input[name=radio-inline4]:checked').val());
+            data.append('ground_floor_room',$('input[name=radio-inline5]:checked').val());
+            
+            data.append('additional_request',$('#inputText6').val());
+            
+            jQuery.ajax({
+                url: "requestClass.php",
+                data: data,
+                type: "POST",
+                cache: false,
+                processData: false, // Don't process the files
+                contentType: false,
+                success:function(data2)
+                {
+                        alert("inserted Successfully!");
+                    
+                    
+                },
+                error: function(jqXHR, textStatus, errorThrown)
+                {
+                    alert("Failed!");
+                }
+            });
+                           
+        }
+
+    function addGuest()
+    {
+        var data = new FormData();
+        var role = $("#addJobtext").val();
+        data.append('method', 'addguest'); 
+        data.append('First_Name',$("#Guest_First_Name").val());
+        data.append('Last_Name',$("#Guest_Last_Name").val());
+        data.append('Family_Name',$("#Guest_Family_Name").val());
+        data.append('Nationality',$("#Guest_Nationality").val());
+        data.append('Age',$("#Guest_Age").val());
+        data.append('Passport',$("#Guest_Passport").val());
+        data.append('Phone_Number',$("#Guest_PhoneNumber").val());
+        data.append('Arrival_Date',$("#Guest_ArrivalDate").val());
+        data.append('Arrival_Time',$("#Guest_ArrivalTime").val());
+        data.append('DepartureDate',$("#Guest_DepartureDate").val());
+        data.append('DepartureTime',$("#Guest_DepartureTime").val());
+        data.append('ArrivedFrom',$("#Guest_ArrivedFrom").val());
+        data.append('roomNum',$("#Selected_Room").val());
+        alert($("#Selected_Room").val());
+        jQuery.ajax({
+            url: "Receptioniest.php",
+            data: data,
+            type: "POST",
+            cache: false,
+            processData: false, // Don't process the files
+            contentType: false,
+            success:function(data2)
+            {
+                 alert("Guest Information Saved Successfully!");
+              
+                
+            },
+            error: function(jqXHR, textStatus, errorThrown)
+            {
+                alert("Failed to Save Guest Info !");
+            }
+        });
+               
+    }
+    
+    function viewAllRooms()
+        {          
+            var data = new FormData();
+            data.append('method','requesting'); 
+            data.append('name',$('#inputText3').val());
+            data.append('extra_bed',$('input[name=radio-inline]:checked').val());
+            jQuery.ajax
+            ({
+                url: "requestClass.php",
+                data: data,
+                type: "POST",
+                cache: false,
+                processData: false, // Don't process the files
+                contentType: false,
+                success:function(data2)
+                {
+                    alert("inserted Successfully!");
+                },
+                error: function(jqXHR, textStatus, errorThrown)
+                {
+                    alert("Failed!");
+                }
+            });
+                           
+        }
+
+    function ReserveRoom()
+    {
+        var data = new FormData();
+        var role = $("#addJobtext").val();
+        data.append('method', 'ReserveRoom'); 
+        data.append('Family_Name',$("#Guest_Family_Name").val());
+        data.append('RoomNumber',$("#Guest_RoomNumber").val());
+        jQuery.ajax
+        ({
+            url: "Receptioniest.php",
+            data: data,
+            type: "POST",
+            cache: false,
+            processData: false, // Don't process the files
+            contentType: false,
+            success:function(data2)
+            {
+                 alert("Room Reserved Successfully!");
+              
+                
+            },
+            error: function(jqXHR, textStatus, errorThrown)
+            {
+                alert("Failed to Reserve Guest Room !");
+            }
+        });
+               
+    }
+
+
+</script>
+
+
+        <div class="container">
+            <div class="row">
+            <div class="media col-md-2 offset-md-10">
+                <a href="https://www.facebook.com">
+                <img src="images/fb.png" >
+                </a>
+                <a href="https://www.twitter.com">
+                <img src="images/twitter.png" >
+                </a>
+                <a href="https://www.instagram.com">
+                <img src="images/instagram.png" >
+                </a>
+            </div>
+            </div>
+            <div class="row align-items-center row-eq-height">
+                <div class=" logo col-md-3">
+                <img src="images/logo.png"> 
+                </div>
+                <div class="call col-md-4 offset-md-5"> 
+                <img src="images/callUs.png" >
+                </div> 
+            </div>
+            <hr class="HR"> 
+            <div class="row">
+            <div class="second" > 
+                <div class="links">
+                <a href="index.html"> Home </a>
+                <a href="login.html"> Log Out</a>
+                </div>
+            </div>
+            </div>
+        </div>
+
+
+  <div class="container">
+    <div class="gowa">
+      <div class="topBar " style="background-color: lightskyblue;">
+        <button id="bookRoom"  onclick="getAvgRate()" style="color: black;">Book Room</button> 
+        <button id="specialRequestButton" style="color: black;">Special Request</button> 
+        <button id="rateButton" style="color: black;">Rate Ur Visit</button> 
+        
+        
+        
+      </div>
+      <div class="restOfForm ">
+      <!-- special request #1 -->
+        <div class="container form1" id="form1" class="allForms">
+            <div class="dashboard-main-wrapper">
+      
+                <div class="dashboard-wrapper">
+                     <div class="container-fluid dashboard-content">
+                         <div class="row">
+                             <div class="col-xl-10">                                                                                    
+                                 <div class="card">                                  
+                                     <h2 style="margin:auto">special request</h2>
+                                         <div class="card-body">
+                                             <div  id="requests" >                                      
+                                                 <label for="inputText3" class="col-form-label">guest name</label>
+                                                 <input id="inputText3" name="guestname" type="text" class="form-control">                                     
+                                             <br>
+                                             </div>
+                                        </div>
+                                   </div>
+         
+                                                   
+                                     
+                                        
+                                        
+                                             <div class="table-responsive " style="margin-bottom:25px" >
+                                                 <table style="width:1280px;  border: 1px solid black;" >
+                                                     <thead>
+                                                         <tr >
+                                                           
+                                                             <th scope="col">additional Service</th>
+                                                             
+                                                             <th scope="col"></th>
+                                                         </tr>
+                                                     </thead>
+                                                     <tbody>
+                                                         <tr>
+                                                             
+                                                        
+                                                             <td>extra bed</td>
+         
+                                                             <td>   <label class="custom-control custom-radio custom-control-inline">
+                                                             <input type="radio" name="radio-inline" class="custom-control-input" value="yes"><span class="custom-control-label">yes</span>
+                                                     </label>
+                                                     <label class="custom-control custom-radio custom-control-inline">
+                                                         <input type="radio" name="radio-inline"class="custom-control-input"  value="no"><span class="custom-control-label">no</span>
+                                                     </label>
+                                                     </label></td>
+                                                            
+                                                         </tr>
+                                                         <tr>
+                                                             
+                                                             <td>sea view</td>
+                                                             <td>   <label class="custom-control custom-radio custom-control-inline">
+                                                                     <input type="radio" name="radio-inline1" class="custom-control-input" value="yes"><span class="custom-control-label">yes</span>
+                                                             </label>
+                                                             <label class="custom-control custom-radio custom-control-inline">
+                                                                 <input type="radio" name="radio-inline1"class="custom-control-input"  value="no"><span class="custom-control-label">no</span>
+                                                             </label>
+                                                             </label></td>
+                                                                    
+                                                                 </tr>
+                                                         <tr>
+         
+         
+         
+         
+         
+                                                         
+                                                         <td>pool view</td>
+                                                         <td>   <label class="custom-control custom-radio custom-control-inline">
+                                                                 <input type="radio" name="radio-inline2" class="custom-control-input" value="yes"><span class="custom-control-label">yes</span>
+                                                         </label>
+                                                         <label class="custom-control custom-radio custom-control-inline">
+                                                             <input type="radio" name="radio-inline2"class="custom-control-input"  value="no"><span class="custom-control-label">no</span>
+                                                         </label>
+                                                         </label></td>
+                                                                
+                                                             </tr>
+                                                         <tr>
+                                                             
+                                                             <td>room breakfast</td>
+                                                             <td>   <label class="custom-control custom-radio custom-control-inline">
+                                                                     <input type="radio" name="radio-inline3" class="custom-control-input" value="yes"><span class="custom-control-label">yes</span>
+                                                             </label>
+                                                             <label class="custom-control custom-radio custom-control-inline">
+                                                                 <input type="radio" name="radio-inline3" class="custom-control-input"  value="no"><span class="custom-control-label">no</span>
+                                                             </label>
+                                                             </label></td>
+                                                                    
+                                                                 </tr>
+                                                         <tr>
+                                                             
+                                                             <td>alchol</td>
+                                                             <td>   <label class="custom-control custom-radio custom-control-inline">
+                                                                     <input type="radio" name="radio-inline4" class="custom-control-input" value="yes"><span class="custom-control-label">yes</span>
+                                                             </label>
+                                                             <label class="custom-control custom-radio custom-control-inline">
+                                                                 <input type="radio" name="radio-inline4"class="custom-control-input"  value="no"><span class="custom-control-label">no</span>
+                                                             </label>
+                                                             </label></td>
+                                                                    
+                                                                 </tr>
+                                                         <tr>
+                                                             
+                                                             <td>ground floor room</td>
+                                                             <td>   <label class="custom-control custom-radio custom-control-inline">
+                                                                     <input type="radio" name="radio-inline5" class="custom-control-input" value="yes"><span class="custom-control-label">yes</span>
+                                                             </label>
+                                                             <label class="custom-control custom-radio custom-control-inline">
+                                                                 <input type="radio" name="radio-inline5"class="custom-control-input"  value="no"><span class="custom-control-label">no</span>
+                                                             </label>
+                                                             </label></td>
+                                                                    
+                                                                 </tr>
+         
+         
+         
+         
+         
+         
+         
+                                                         <tr>
+                                                             
+                                                        
+                                                         <tr>
+                                                             
+                                                             <td >special request</td>
+                                                             <td colspan="3"height="70px"><textarea  id="inputText6" class="form-control" type="text"  name="final"></textarea></td>
+                                            
+                                                            
+                                                         </tr>
+         
+                                                     </tbody>
+                                                 </table>
+                                             </div>
+                                         </div>
+                                     </div>
+                                 </div>
+                                
+                             
+                        
+                                 <h5>*please note any spiceal request will send to admin to approve it</h5>
+         
+                                                     <div class="col-sm-6 pl-0">
+                                                         <p class="text-right">
+                                                 
+                                                             <button onclick="spcecial_request()">request</button>
+                                                         </p>
+                                                     </div>
+                 
+                
+                                              
+                                             </div>
+                                             </div>
+        </div>
+
+
+        <!-- rate #2 -->
+        <div class="container form2" id="form2" class="allForms">
+                <div class="dashboard-main-wrapper">   
+                        <div class="dashboard-wrapper">
+                             <div class="container-fluid dashboard-content">
+                                 <div class="row">
+                                     <div class="col-xl-10">
+                                        
+                                                 
+                                                 
+                                         <div class="card" style="text-align: center;">
+                                                    
+                                             <h2 >Rate your visit</h2>
+                                                 <div class="card-body">
+                                                     <div  id="ratee" >
+                                                        
+                                                         <label class="col-form-label">guest name</label>
+                                                         <input id="rate-guest-name" name="guestname" type="text" class="form-control">
+                                                         <br>
+                                                         <label for="inputText4" class="col-form-label">room number</label>
+                                                         <input id="inputText4"  name="roomno" type="text" class="form-control">
+                                                         <br>
+                                                         <div class="input-group date" id="datetimepicker5" data-target-input="nearest">
+                                                         <label for="inputText5" class="col-form-label">Date of checkout</label>
+                                                         <input type="date"  id="date" name="Doc"  class="form-control datetimepicker-input" data-target="#datetimepicker4" />
+                                                         <div class="input-group-append" data-target="#datetimepicker4" data-toggle="datetimepicker" >
+                                                             <div class="input-group-text"><i class="far fa-calendar-alt"></i></div>
+                                                         </div>
+                                                                 </div>
+                 
+                                                    
+                                                 </div>
+                 
+                                                           
+                                             
+                                                
+                                                
+                                                     <div class="table-responsive " style="margin-bottom:25px" >
+                                                         <table style="width:1280px;  border: 1px solid black;" >
+                                                             <thead>
+                                                                 <tr >
+                                                                   
+                                                                     <th scope="col">Service</th>
+                                                                     
+                                                                     <th scope="col">Rate</th>
+                                                                 </tr>
+                                                             </thead>
+                                                             <tbody>
+                                                                 <tr>
+                                                                     
+                                                                
+                                                                     <td>front office</td>
+                 
+                                                                     <td>   <label class="custom-control custom-radio custom-control-inline">
+                                                                     <input type="radio" name="radio-inline" class="custom-control-input" value="5"><span class="custom-control-label">Excellent</span>
+                                                             </label>
+                                                             <label class="custom-control custom-radio custom-control-inline">
+                                                                 <input type="radio" name="radio-inline"class="custom-control-input"  value="4"><span class="custom-control-label">Very Good</span>
+                                                             </label>
+                                                             <label class="custom-control custom-radio custom-control-inline">
+                                                                 <input type="radio" name="radio-inline" class="custom-control-input" value="3"><span class="custom-control-label">Good</span>
+                                                             </label>
+                                                             <label class="custom-control custom-radio custom-control-inline">
+                                                                 <input type="radio" name="radio-inline" class="custom-control-input" value="2"><span class="custom-control-label">fair</span>
+                                                             </label>
+                                                             <label class="custom-control custom-radio custom-control-inline">
+                                                                 <input type="radio" name="radio-inline" class="custom-control-input" value="1"><span class="custom-control-label">poor</span>
+                 </label></td>
+                                                                    
+                                                                 </tr>
+                                                                 <tr>
+                                                                     
+                                                                     <td>Restaurant</td>
+                                                                     <td>   <label class="custom-control custom-radio custom-control-inline">
+                                                                     <input type="radio" name="radio-inline1" class="custom-control-input" value="5"><span class="custom-control-label">Excellent</span>
+                                                             </label>
+                                                             <label class="custom-control custom-radio custom-control-inline">
+                                                                 <input type="radio" name="radio-inline1" class="custom-control-input"  value="4"><span class="custom-control-label">Very Good</span>
+                                                             </label>
+                                                             <label class="custom-control custom-radio custom-control-inline">
+                                                                 <input type="radio" name="radio-inline1" class="custom-control-input" value="3"><span class="custom-control-label">Good</span>
+                                                             </label>
+                                                             <label class="custom-control custom-radio custom-control-inline">
+                                                                 <input type="radio" name="radio-inline1" class="custom-control-input" value="2"><span class="custom-control-label">fair</span>
+                                                             </label>
+                                                             <label class="custom-control custom-radio custom-control-inline">
+                                                                 <input type="radio" name="radio-inline1" class="custom-control-input" value="1"><span class="custom-control-label">poor</span>
+                 </label></td>
+                                                                    
+                                                                 </tr>
+                                                                 <tr>
+                 
+                 
+                 
+                 
+                 
+                                                                 
+                                                                 <td>Room Service</td>
+                                                                 <td>   <label class="custom-control custom-radio custom-control-inline">
+                                                                     <input type="radio" name="radio-inline2" class="custom-control-input" value="5"><span class="custom-control-label">Excellent</span>
+                                                             </label>
+                                                             <label class="custom-control custom-radio custom-control-inline">
+                                                                 <input type="radio" name="radio-inline2"class="custom-control-input"  value="4"><span class="custom-control-label">Very Good</span>
+                                                             </label>
+                                                             <label class="custom-control custom-radio custom-control-inline">
+                                                                 <input type="radio" name="radio-inline2" class="custom-control-input" value="3"><span class="custom-control-label">Good</span>
+                                                             </label>
+                                                             <label class="custom-control custom-radio custom-control-inline">
+                                                                 <input type="radio" name="radio-inline2" class="custom-control-input" value="2"><span class="custom-control-label">fair</span>
+                                                             </label>
+                                                             <label class="custom-control custom-radio custom-control-inline">
+                                                                 <input type="radio" name="radio-inline2" class="custom-control-input" value="1"><span class="custom-control-label">poor</span>
+                 </label></td>
+                                                                    
+                                                                 </tr>
+                                                                 <tr>
+                                                                     
+                                                                     <td>appliances</td>
+                                                                     <td>   <label class="custom-control custom-radio custom-control-inline">
+                                                                     <input type="radio" name="radio-inline3" class="custom-control-input" value="5"><span class="custom-control-label">Excellent</span>
+                                                             </label>
+                                                             <label class="custom-control custom-radio custom-control-inline">
+                                                                 <input type="radio" name="radio-inline3" class="custom-control-input"  value="4"><span class="custom-control-label">Very Good</span>
+                                                             </label>
+                                                             <label class="custom-control custom-radio custom-control-inline">
+                                                                 <input type="radio" name="radio-inline3" class="custom-control-input" value="3"><span class="custom-control-label">Good</span>
+                                                             </label>
+                                                             <label class="custom-control custom-radio custom-control-inline">
+                                                                 <input type="radio" name="radio-inline3" class="custom-control-input" value="2"><span class="custom-control-label">fair</span>
+                                                             </label>
+                                                             <label class="custom-control custom-radio custom-control-inline">
+                                                                 <input type="radio" name="radio-inline3" class="custom-control-input" value="1"><span class="custom-control-label">poor</span>
+                 </label></td>
+                                                                    
+                                                                 </tr>
+                                                                 <tr>
+                                                                     
+                                                                     <td>room clearness</td>
+                                                                     <td>   <label class="custom-control custom-radio custom-control-inline">
+                                                                     <input type="radio" name="radio-inline4" class="custom-control-input" value="5"><span class="custom-control-label">Excellent</span>
+                                                             </label>
+                                                             <label class="custom-control custom-radio custom-control-inline">
+                                                                 <input type="radio" name="radio-inline4"class="custom-control-input"  value="4"><span class="custom-control-label">Very Good</span>
+                                                             </label>
+                                                             <label class="custom-control custom-radio custom-control-inline">
+                                                                 <input type="radio" name="radio-inline4" class="custom-control-input" value="3"><span class="custom-control-label">Good</span>
+                                                             </label>
+                                                             <label class="custom-control custom-radio custom-control-inline">
+                                                                 <input type="radio" name="radio-inline4" class="custom-control-input" value="2"><span class="custom-control-label">fair</span>
+                                                             </label>
+                                                             <label class="custom-control custom-radio custom-control-inline">
+                                                                 <input type="radio" name="radio-inline4" class="custom-control-input" value="1"><span class="custom-control-label">poor</span>
+                 </label></td>
+                                                                    
+                                                                 </tr>
+                                                                 <tr>
+                                                                     
+                                                                     <td>other service</td>
+                                                                     <td>   <label class="custom-control custom-radio custom-control-inline">
+                                                                     <input type="radio" name="radio-inline5" class="custom-control-input" value="5"><span class="custom-control-label">Excellent</span>
+                                                             </label>
+                                                             <label class="custom-control custom-radio custom-control-inline">
+                                                                 <input type="radio" name="radio-inline5"class="custom-control-input"  value="4"><span class="custom-control-label">Very Good</span>
+                                                             </label>
+                                                             <label class="custom-control custom-radio custom-control-inline">
+                                                                 <input type="radio" name="radio-inline5" class="custom-control-input" value="3"><span class="custom-control-label">Good</span>
+                                                             </label>
+                                                             <label class="custom-control custom-radio custom-control-inline">
+                                                                 <input type="radio" name="radio-inline5" class="custom-control-input" value="2"><span class="custom-control-label">fair</span>
+                                                             </label>
+                                                             <label class="custom-control custom-radio custom-control-inline">
+                                                                 <input type="radio" name="radio-inline5" class="custom-control-input" value="1"><span class="custom-control-label">poor</span>
+                 </label></td>
+                                                                    
+                                                                 </tr>
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                                                                 <tr>
+                                                                     
+                                                                     <td> Staff Attitude</td>
+                                                                     <td>   <label class="custom-control custom-radio custom-control-inline">
+                                                                     <input type="radio" name="radio-inline6" class="custom-control-input" value="5"><span class="custom-control-label">Excellent</span>
+                                                             </label>
+                                                             <label class="custom-control custom-radio custom-control-inline">
+                                                                 <input type="radio" name="radio-inline6"class="custom-control-input"  value="4"><span class="custom-control-label">Very Good</span>
+                                                             </label>
+                                                             <label class="custom-control custom-radio custom-control-inline">
+                                                                 <input type="radio" name="radio-inline6" class="custom-control-input" value="3"><span class="custom-control-label">Good</span>
+                                                             </label>
+                                                             <label class="custom-control custom-radio custom-control-inline">
+                                                                 <input type="radio" name="radio-inline6" class="custom-control-input" value="2"><span class="custom-control-label">fair</span>
+                                                             </label>
+                                                             <label class="custom-control custom-radio custom-control-inline">
+                                                                 <input type="radio" name="radio-inline6" class="custom-control-input" value="1"><span class="custom-control-label">poor</span>
+                 </label></td>
+                                                                    
+                                                                 </tr>
+                                                                 <tr>
+                                                                     
+                                                                     <td>Over all expireance </td>
+                                                                     <td>   <label class="custom-control custom-radio custom-control-inline">
+                                                                     <input type="radio" name="radio-inline7" class="custom-control-input" value="5"><span class="custom-control-label">Excellent</span>
+                                                             </label>
+                                                             <label class="custom-control custom-radio custom-control-inline">
+                                                                 <input type="radio" name="radio-inline7"class="custom-control-input"  value="4"><span class="custom-control-label">Very Good</span>
+                                                             </label>
+                                                             <label class="custom-control custom-radio custom-control-inline">
+                                                                 <input type="radio" name="radio-inline7" class="custom-control-input" value="3"><span class="custom-control-label">Good</span>
+                                                             </label>
+                                                             <label class="custom-control custom-radio custom-control-inline">
+                                                                 <input type="radio" name="radio-inline7" class="custom-control-input" value="2"><span class="custom-control-label">fair</span>
+                                                             </label>
+                                                             <label class="custom-control custom-radio custom-control-inline">
+                                                                 <input type="radio" name="radio-inline7" class="custom-control-input" value="1"><span class="custom-control-label">poor</span>
+                 </label></td>
+                                                                    
+                                                                 </tr>
+                                                                 <tr>
+                                                                     
+                                                                     <td >Complain</td>
+                                                                     <td colspan="3"height="70px"><textarea  id="rate-textarea" class="form-control" type="text"  name="finalc"></textarea></td>
+                                                    
+                                                                    
+                                                                 </tr>
+                 
+                                                                
+                                                             </tbody>
+                                                         </table>
+                                                     </div>
+                                                 </div>
+                                             </div>
+                                         </div>
+                                        
+                                     
+                                
+                            
+                                                             <div class="col-sm-6 pl-0">
+                                                                 <p class="text-right">
+                                                         
+                                                                     <button onclick="rate()">Submit</button>
+                                                                 </p>
+                                                             </div>
+                         
+                        
+                                                      
+                                                     </div>
+                                                     </div>
+                         </div>
+                     </div>
+
+        </div>
+        
+
+        <!-- rate #3 -->
+        <div class="container form3" id="form3" class="allForms">
+            <h3 style="text-align: center;"> Guest Form  </h3>
+            <div style="text-align: center;">
+                First Name :
+                <input type="text" id="Guest_First_Name" required> <br>
+                Last Name :
+                <input type="text" id="Guest_Last_Name" required><br>
+                Family Name :
+                <input type="text" id="Guest_Family_Name" required><br>
+                Nationality :
+                <input type="text" id="Guest_Nationality" required><br>
+                Age :
+                <input type="number" id="Guest_Age" required><br>
+                Passport Number :
+                <input type="number" id="Guest_Passport" required><br>
+                Phone Number :
+                <input type="text" id="Guest_PhoneNumber" required><br>
+                Arrival Date :
+                <input type="date" id="Guest_ArrivalDate" required> 
+                Arrival Time :
+                <input type="time" id="Guest_ArrivalTime" required> <br>
+                Departure Date :
+                <input type="date" id="Guest_DepartureDate" required>
+                Departure Time :
+                <input type="time" id="Guest_DepartureTime" required><br>
+                Arrived From :
+                <input type="text" id="Guest_ArrivedFrom" required><br>
+                <select id="Selected_Room" > </select><br>
+                <div>
+                  <h2  id="rateDiv"></h2>
+                </div>
+                <button onclick="addGuest() ; ReserveRoom()  " > Add Guest </button>
+            </div>
+        </div>
+
+        
+      </div>
+    </div>
+  </div>
+  </body>
+
+  <script>
+  $("#specialRequestButton").click(function () 
+    {
+      $("#form1").show();
+      $("#form2").hide();
+      $("#form3").hide();
+    });
+
+
+    $("#rateButton").click(function () {
+      $("#form1").hide();
+      $("#form2").show();
+      $("#form3").hide();
+
+      
+    });
+
+    $("#bookRoom").click(function () {
+      $("#form1").hide();
+      $("#form2").hide();
+      $("#form3").show();
+
+      
+    });
+
+    
+    </script>
+</html>
+
